@@ -9,137 +9,7 @@ PROGRAMER: SANDOR ACTUALIZACION: 1 MAY 2023
 	define('__ROOT3__', dirname(dirname(__FILE__)));
 	require __ROOT3__."/includes/class.epcinn.php";	
 	
-/*
-class listadoproveedores extends colaboradores{
-		
-	public function listado2(){
-		$conn = $this->db();
 
-		$var = 'select *,02usuarios.id AS IDDD from 02usuarios, 02direccionproveedor1, 02metodopago where 02usuarios.id = 02direccionproveedor1.idRelacion and 02usuarios.id = 02metodopago.idRelacion 
-		order by 02usuarios.id desc';
-		
-		$query = mysqli_query($conn,$var);
-		echo "<table class='table mb-0 table-striped'><tr>
-		<td>usuario</td>
-		<td>RAZÓN SOCIAL</td>
-		<td>EFC</td>
-		<td>EMAIL</td>
-		<td>Masiva</td>
-
-		</tr>";
-		while($row = mysqli_fetch_array($query)){
-			echo '<tr>
-		<td><a href="PROVEEDORES.php?idPROV='.$row['IDDD'].'">'.$row['usuario'].'</a></td>
-		<td>'.$row['nommbrerazon'].' '.$row['nommbrerazon'].'</td>
-		<td>'.$row['rfc'].'</td>
-		<td>'.$row['email'].'</td>
-		<td>
-		<a href="'. $_SERVER['PHP_SELF']. '?idr1='.$row['id1'].'" target="_blank"><img src="includes/descargar.png"/></a></td>
-		</tr>';
-		}
-		echo "</table>";		
-	}	
-
-
-	public function variablesusuario2($id){
-		$conn = $this->db();
-		$var = 'select * from 02usuarios
-		where id='.$id.' order by id desc ';
-		$query = mysqli_query($conn,$var);
-		return $row = mysqli_fetch_array($query, MYSQLI_ASSOC);
-	}
-	
-	
-	
-
-
-	public function variableusuario2(){
-		$conn = $this->db();
-		$variablequery = "select * from 02usuarios where idRelacion = '".$_SESSION['idPROV']."' ";
-		$arrayquery = mysqli_query($conn,$variablequery);
-		return $row = mysqli_fetch_array($arrayquery, MYSQLI_ASSOC);		
-	}
-
-	public function revisar_usuario2($idp){
-		$conn = $this->db();
-		$var1 = 'select id from 02usuarios where id =  "'.$idp.'" ';
-		$query = mysqli_query($conn,$var1) or die('P44'.mysqli_error($conn));
-		$row = mysqli_fetch_array($query, MYSQLI_ASSOC);
-		return $row['id'];
-	}
-
-
-	public function revisar_02direccionproveedor1($idp){
-		$conn = $this->db();
-		$var1 = 'select id from 02direccionproveedor1 where idRelacion =  "'.$idp.'" ';
-		$query = mysqli_query($conn,$var1) or die('P44'.mysqli_error($conn));
-		$row = mysqli_fetch_array($query, MYSQLI_ASSOC);
-		return $row['id'];
-	}
-	
-
-	public function revisar_02metodopago($RFC){
-		$conn = $this->db();
-		$var1 = 'select id from 02metodopago where P_RFC_MTDP =  "'.$RFC.'" ';
-		$query = mysqli_query($conn,$var1) or die('P44'.mysqli_error($conn));
-		$row = mysqli_fetch_array($query, MYSQLI_ASSOC);
-		return $row['id'];
-	}	
-	
-
-
-
-	public function guardar_usuario2 ($usuario , $nommbrerazon , $contrasenia , $email , $rfc ){
-
-		$conn = $this->db();		
-		//$session = isset($_SESSION['idPROV'])?$_SESSION['idPROV']:'';
-		
-
-
-		$existe3 = $this->revisar_02metodopago($rfc);
-		$idwebc ='';
-		
-
-			if($existe3>=1){
-		mysqli_query($conn,"update 02metodopago set P_RFC_MTDP = '".$rfc."' where idRelacion = '".$existe3."' ; ") or die('P156'.mysqli_error($conn));
-		return "Actualizado";
-		$idwebc = $existe3;
-		}else{
-		mysqli_query($conn,"insert into 02metodopago 
-		( P_RFC_MTDP, idRelacion) values 
-		( '".$rfc."' ,  '".$idwebc."' ); ") or die('P160'.mysqli_error($conn));
-		$idwebc = mysqli_insert_id($conn);
-		return "Ingresado";
-		}		
-
-		$existe2 = $this->revisar_02direccionproveedor1($idwebc);
-			$existe1 = $this->revisar_usuario2($idwebc);		
-		
-		if($existe2>=1){
-		mysqli_query($conn,"update 02direccionproveedor1 set P_NOMBRE_COMERCIAL_EMPRESA = '".$nommbrerazon."' where idRelacion = '".$idwebc."' ; ") or die('P156'.mysqli_error($conn));
-		return "Actualizado";
-		}else{
-		mysqli_query($conn,"insert into 02direccionproveedor1 ( P_NOMBRE_COMERCIAL_EMPRESA, idRelacion) values ( '".$nommbrerazon."' ,  '".$idwebc."' ); ") or die('P160'.mysqli_error($conn));
-		return "Ingresado";
-		}
-
-	
-			if($existe1>=1){
-		mysqli_query($conn, "update 02usuarios set usuario = '".$usuario."' , nommbrerazon = '".$nommbrerazon."' , contrasenia = '".$contrasenia."' , email = '".$email."' where idRelacion = '".$idwebc."' ; ") or die('P156'.mysqli_error($conn));
-		return "Actualizado";
-		//$idwebc = $existe1;
-		}else{
-		mysqli_query($conn,"insert into 02usuarios ( usuario, nommbrerazon, contrasenia, email, idRelacion) values ( '".$usuario."' , '".$nommbrerazon."' , '".$contrasenia."' , '".$email."' ,  '".$idwebc."' ); ") or die('P160'.mysqli_error($conn));
-		//$idwebc = mysqli_insert_id($conn);
-		//return "Ingresado";
-		}	
-		
-		//}		
-	}
-
-	}
-
-	*/
 	
 	class accesoclase extends colaboradores{
 
@@ -601,9 +471,11 @@ class listadoproveedores extends colaboradores{
 		if($existe>=1){		
 
 		mysqli_query($conn,$var1) or die('P156'.mysqli_error($conn));
+		mysqli_query($conn, "update 02usuarios set nommbrerazon = '".$P_NOMBRE_COMERCIAL_EMPRESA."' where id = '".$session."' ; ") or die('P156'.mysqli_error($conn));
 		return "Actualizado";
 		}else{
 		mysqli_query($conn,$var2) or die('P160'.mysqli_error($conn));
+		mysqli_query($conn, "update 02usuarios set nommbrerazon = '".$P_NOMBRE_COMERCIAL_EMPRESA."' where id = '".$session."' ; ") or die('P156'.mysqli_error($conn));
 		return "Ingresado";
 		}
 		}else{
@@ -616,43 +488,107 @@ class listadoproveedores extends colaboradores{
 /* metodo pago*/ 
 
 
-	public function variable_metodopagoproveedor(){
-		$conn = $this->db();
-		$variablequery = "select * from 02metodopago where idRelacion = '".$_SESSION['idPROV']."' ";
-		$arrayquery = mysqli_query($conn,$variablequery);
-		return $row = mysqli_fetch_array($arrayquery, MYSQLI_ASSOC);		
-	}
 
-	public function revisar_metodopagoproveedor(){
-		$conn = $this->db();
-		$var1 = 'select id from 02metodopago where idRelacion =  "'.$_SESSION['idPROV'].'" ';
-		$query = mysqli_query($conn,$var1) or die('P44'.mysqli_error($conn));
-		$row = mysqli_fetch_array($query, MYSQLI_ASSOC);
-		return $row['id'];
-	}
+public function revisar_metodopagoproveedor(){
+    $conn = $this->db();
+    $var1 = 'SELECT id FROM 02metodopago WHERE idRelacion = "'.$_SESSION['idPROV'].'" ';
+    $query = mysqli_query($conn,$var1) or die('P44'.mysqli_error($conn));
+    $row = mysqli_fetch_array($query, MYSQLI_ASSOC);
+    return isset($row['id']) ? $row['id'] : null;
+}
 
-	public function metodopagoproveedor ($P_CONDICIONES_DE_PAGO , $P_LIMITE_DE_CREDITO , $P_FECHA_INICIO_NUEVO_CONVENIO , $P_FECHA_FINALIZACION_CONVENIO , $P_PORCENTAJE_COMISION_OTORGA ){
-		$conn = $this->db();
-		$existe = $this->revisar_metodopagoproveedor();
-		$session = isset($_SESSION['idPROV'])?$_SESSION['idPROV']:'';
-		if($session != ''){
-			
-		$var1 = "update 02metodopago set  P_CONDICIONES_DE_PAGO = '".$P_CONDICIONES_DE_PAGO."' , P_LIMITE_DE_CREDITO = '".$P_LIMITE_DE_CREDITO."' , P_FECHA_INICIO_NUEVO_CONVENIO = '".$P_FECHA_INICIO_NUEVO_CONVENIO."' , P_FECHA_FINALIZACION_CONVENIO = '".$P_FECHA_FINALIZACION_CONVENIO."' , P_PORCENTAJE_COMISION_OTORGA = '".$P_PORCENTAJE_COMISION_OTORGA."' , VALIDAMETODOPAGO = '".$VALIDAMETODOPAGO."' where idRelacion = '".$session."' ; ";
-		
-		$var2 = "insert into 02metodopago (  P_CONDICIONES_DE_PAGO, P_LIMITE_DE_CREDITO, P_FECHA_INICIO_NUEVO_CONVENIO, P_FECHA_FINALIZACION_CONVENIO, P_PORCENTAJE_COMISION_OTORGA, idRelacion) values ( '".$P_CONDICIONES_DE_PAGO."' , '".$P_LIMITE_DE_CREDITO."' , '".$P_FECHA_INICIO_NUEVO_CONVENIO."' , '".$P_FECHA_FINALIZACION_CONVENIO."' , '".$P_PORCENTAJE_COMISION_OTORGA."' , '".$session."' );  ";			
-			
-		if($existe>=1){		
+public function metodopagoproveedor(
+    $P_CONDICIONES_DE_PAGO,
+    $P_LIMITE_DE_CREDITO,
+    $P_FECHA_INICIO_NUEVO_CONVENIO,
+    $P_FECHA_FINALIZACION_CONVENIO,
+    $P_PORCENTAJE_COMISION_OTORGA,
+    $CONVENIO_PROVEEDOR,
+    $OBSERVACIONES_CONVENIO,
+    $ULTIMA_CARGA_CONVENIO,
+    $CONVENIO_DOPROVEEDOR,
+    $ENVIACONVENIO,
+    $ipconvenio
+){
+    $conn = $this->db();
+    $existe = $this->revisar_metodopagoproveedor();
+    $session = isset($_SESSION['idPROV']) ? $_SESSION['idPROV'] : '';
 
-		mysqli_query($conn,$var1) or die('P156'.mysqli_error($conn));
-		return "Actualizado";
-		}else{
-		mysqli_query($conn,$var2) or die('P160'.mysqli_error($conn));
-		return "Ingresado";
-		}
-		}else{
-		echo '<p class="fs-4">NO HAY UN PROVEEDOR SELECCIONADO</p>'; 
-		}
-	}
+    if($session != ''){
+        // Evitar notice por variable no definida en el UPDATE
+        $VALIDAMETODOPAGO = isset($VALIDAMETODOPAGO) ? $VALIDAMETODOPAGO : '';
+
+        $var1 = "UPDATE 02metodopago SET
+            P_CONDICIONES_DE_PAGO = '".$P_CONDICIONES_DE_PAGO."',
+            P_LIMITE_DE_CREDITO = '".$P_LIMITE_DE_CREDITO."',
+            P_FECHA_INICIO_NUEVO_CONVENIO = '".$P_FECHA_INICIO_NUEVO_CONVENIO."',
+            P_FECHA_FINALIZACION_CONVENIO = '".$P_FECHA_FINALIZACION_CONVENIO."',
+            P_PORCENTAJE_COMISION_OTORGA = '".$P_PORCENTAJE_COMISION_OTORGA."',
+            CONVENIO_PROVEEDOR = '".$CONVENIO_PROVEEDOR."',
+            OBSERVACIONES_CONVENIO = '".$OBSERVACIONES_CONVENIO."',
+            ULTIMA_CARGA_CONVENIO = '".$ULTIMA_CARGA_CONVENIO."',
+            VALIDAMETODOPAGO = '".$VALIDAMETODOPAGO."'
+        WHERE id = '".$ipconvenio."' ;";
+
+        $var2 = "INSERT INTO 02metodopago (
+            P_CONDICIONES_DE_PAGO,
+            P_LIMITE_DE_CREDITO,
+            P_FECHA_INICIO_NUEVO_CONVENIO,
+            P_FECHA_FINALIZACION_CONVENIO,
+            P_PORCENTAJE_COMISION_OTORGA,
+            CONVENIO_PROVEEDOR,
+            OBSERVACIONES_CONVENIO,
+            ULTIMA_CARGA_CONVENIO,
+            CONVENIO_DOPROVEEDOR,
+            idRelacion
+        ) VALUES (
+            '".$P_CONDICIONES_DE_PAGO."',
+            '".$P_LIMITE_DE_CREDITO."',
+            '".$P_FECHA_INICIO_NUEVO_CONVENIO."',
+            '".$P_FECHA_FINALIZACION_CONVENIO."',
+            '".$P_PORCENTAJE_COMISION_OTORGA."',
+            '".$CONVENIO_PROVEEDOR."',
+            '".$OBSERVACIONES_CONVENIO."',
+            '".$ULTIMA_CARGA_CONVENIO."',
+            '".$CONVENIO_DOPROVEEDOR."',
+            '".$_SESSION['idPROV']."'
+        );";
+
+        if($ENVIACONVENIO == 'ENVIACONVENIO'){
+            mysqli_query($conn, $var1) or die('P156'.mysqli_error($conn));
+            return "Actualizado";
+        } else {
+            mysqli_query($conn, $var2) or die('P160'.mysqli_error($conn));
+            return "Ingresado";
+        }
+    } else {
+        echo '<p class="fs-4">NO HAY UN PROVEEDOR SELECCIONADO</p>';
+    }
+}
+
+public function listadoCONDICIONES(){
+    $conn = $this->db();
+    $variablequery = "SELECT * FROM 02metodopago WHERE idRelacion = '".$_SESSION['idPROV']."' ORDER BY id DESC ";
+    return $arrayquery = mysqli_query($conn,$variablequery);
+}
+
+public function listadoCONDICIONES2($id){
+    $conn = $this->db();
+    $variablequery = "SELECT * FROM 02metodopago WHERE id = '".$id."' ";
+    return $arrayquery = mysqli_query($conn,$variablequery);
+}
+
+public function borraMETODODP($id){
+    $conn = $this->db();
+    $variablequery = "DELETE FROM 02metodopago WHERE id = '".$id."' ";
+    $arrayquery = mysqli_query($conn,$variablequery);
+    return "<p style='color:green; font-size:25px;'>ELEMENTO BORRADO</p>";
+}
+
+
+
+
+
 
 
 /* contacto  proveedor*/ 

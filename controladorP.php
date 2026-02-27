@@ -14,6 +14,8 @@ $conexion = NEW colaboradores();
 $enviarOTROS_PRODUCTOS = isset($_POST["enviarOTROS_PRODUCTOS"])?$_POST["enviarOTROS_PRODUCTOS"]:"";
 $VALIDADIRECCIONEP1 = isset($_POST["VALIDADIRECCIONEP1"])?$_POST["VALIDADIRECCIONEP1"]:"";
 $VALIDAMETODOPAGO = isset($_POST["VALIDAMETODOPAGO"])?$_POST["VALIDAMETODOPAGO"]:"";
+$ENVIACONVENIO = isset($_POST["ENVIACONVENIO"])?$_POST["ENVIACONVENIO"]:"";
+$borraMETODODP = isset($_POST["borraMETODODP"])?$_POST["borraMETODODP"]:"";
 $validaNOMBRECONTACTO1 = isset($_POST["validaNOMBRECONTACTO1"])?$_POST["validaNOMBRECONTACTO1"]:"";
 $validaNOMBRECONTACTO2 = isset($_POST["validaNOMBRECONTACTO2"])?$_POST["validaNOMBRECONTACTO2"]:"";
 $validaNOMBRECONTACTO3 = isset($_POST["validaNOMBRECONTACTO3"])?$_POST["validaNOMBRECONTACTO3"]:"";
@@ -348,6 +350,7 @@ echo $conexion2->email($EMAILnombre, $html, $adjuntos, $embebida, $Subject);
  
  
  
+ 
 elseif($hLIGA_PRODUCTOS == 'hLIGA_PRODUCTOS' or $ENVIARLIGAervicios1 == 'ENVIARLIGAervicios1'){
 	
 	$PRODUCTO_O_SERVICIO_LIGA = isset($_POST["PRODUCTO_O_SERVICIO_LIGA"])?$_POST["PRODUCTO_O_SERVICIO_LIGA"]:"";
@@ -564,9 +567,20 @@ elseif($borraotrosdocuu == 'borraotrosdocuu'){
 	echo $proveedoresC->borraotrosdocuu($borra_id_DOCUU);
    	//include_once (__ROOT1__."/includes/crea_funciones.php");
 }
+
+
+
+
+
 	
-elseif($VALIDAMETODOPAGO == 'VALIDAMETODOPAGO'){
-	
+elseif($VALIDAMETODOPAGO == 'VALIDAMETODOPAGO' or $ENVIACONVENIO == 'ENVIACONVENIO'){
+if( $_FILES["CONVENIO_DOPROVEEDOR"] == true){
+$CONVENIO_DOPROVEEDOR = $conexion->solocargar("CONVENIO_DOPROVEEDOR");
+}if($CONVENIO_DOPROVEEDOR=='2' or $CONVENIO_DOPROVEEDOR=='' or $CONVENIO_DOPROVEEDOR=='1'){
+	$CONVENIO_DOPROVEEDOR1="";
+} else{
+ $CONVENIO_DOPROVEEDOR1 = $CONVENIO_DOPROVEEDOR;
+}		
 
 $P_CONDICIONES_DE_PAGO = isset($_POST["P_CONDICIONES_DE_PAGO"])?$_POST["P_CONDICIONES_DE_PAGO"]:"";
 $P_LIMITE_DE_CREDITO = isset($_POST["P_LIMITE_DE_CREDITO"])?$_POST["P_LIMITE_DE_CREDITO"]:"";
@@ -574,17 +588,37 @@ $P_FECHA_INICIO_NUEVO_CONVENIO = isset($_POST["P_FECHA_INICIO_NUEVO_CONVENIO"])?
 $P_FECHA_FINALIZACION_CONVENIO = isset($_POST["P_FECHA_FINALIZACION_CONVENIO"])?$_POST["P_FECHA_FINALIZACION_CONVENIO"]:"";
 $P_PORCENTAJE_COMISION_OTORGA = isset($_POST["P_PORCENTAJE_COMISION_OTORGA"])?$_POST["P_PORCENTAJE_COMISION_OTORGA"]:"";
 
+$CONVENIO_PROVEEDOR = isset($_POST["CONVENIO_PROVEEDOR"])?$_POST["CONVENIO_PROVEEDOR"]:"";
+$OBSERVACIONES_CONVENIO = isset($_POST["OBSERVACIONES_CONVENIO"])?$_POST["OBSERVACIONES_CONVENIO"]:"";
+$ULTIMA_CARGA_CONVENIO = isset($_POST["ULTIMA_CARGA_CONVENIO"])?$_POST["ULTIMA_CARGA_CONVENIO"]:"";
+$ipconvenio = isset($_POST["ipconvenio"])?$_POST["ipconvenio"]:"";
 
-	echo $proveedoresC->metodopagoproveedor ($P_CONDICIONES_DE_PAGO , $P_LIMITE_DE_CREDITO , $P_FECHA_INICIO_NUEVO_CONVENIO , $P_FECHA_FINALIZACION_CONVENIO , $P_PORCENTAJE_COMISION_OTORGA );
+
+
+	echo $proveedoresC->metodopagoproveedor ($P_CONDICIONES_DE_PAGO , $P_LIMITE_DE_CREDITO , $P_FECHA_INICIO_NUEVO_CONVENIO , $P_FECHA_FINALIZACION_CONVENIO , $P_PORCENTAJE_COMISION_OTORGA,$CONVENIO_PROVEEDOR,$OBSERVACIONES_CONVENIO,$ULTIMA_CARGA_CONVENIO,$CONVENIO_DOPROVEEDOR1,$ENVIACONVENIO,$ipconvenio);
 }	
 
-/*PARA ENVIAR EMAIL*/
 elseif($METODOPAGO_ENVIAR_IMAIL ==true){
 $conexion2 = new herramientas();
 $NOMBRE_1 = 'Peticion';
 $EMAILnombre = array($METODOPAGO_ENVIAR_IMAIL=>$NOMBRE_1);
 $adjuntos = array(''=>'');
 $Subject = 'DATOS SOLICITADOS';
+/*nuevo*/
+$array = isset($_POST['condicion'])?$_POST['condicion']:'';
+if($array != ''){
+$loopcuenta = count($array) - 1;$loopcuenta2 = count($array) - 2;
+$or1='';
+for($rrr=0;$rrr<=$loopcuenta;$rrr++){
+	if($rrr<=$loopcuenta2){$or1 = ' or ';}else{$or1 = '';}
+	$query1 .= ' id= '.$array[$rrr].$or1;
+}
+$query2 = str_replace('[object Object]','',$query1);
+$query2 = "and (".$query2.") ";
+}else{
+	echo "SELECCIONA UNA CASILLA DEL LISTADO DE ABAJO."; exit;
+}                                                                   
+/*nuevo variables_informacionfiscal_logo*/    
 
 $MANDA_INFORMACION = $proveedoresC->MANDA_INFORMACION(
 'P_CONDICIONES_DE_PAGO , P_LIMITE_DE_CREDITO,P_FECHA_INICIO_NUEVO_CONVENIO , P_FECHA_FINALIZACION_CONVENIO , P_PORCENTAJE_COMISION_OTORGA ',
@@ -606,7 +640,12 @@ $embebida = array('../includes/archivos/'.$logo => 'ver');
 echo $conexion2->email($EMAILnombre, $html, $adjuntos, $embebida, $Subject);
 }
  
-
+elseif($borraMETODODP == 'borraMETODODP'){
+	$borra_id_MPAGO = isset($_POST["borra_id_MPAGO"])?$_POST["borra_id_MPAGO"]:"";
+		
+	echo $proveedoresC->borraMETODODP($borra_id_MPAGO);
+   	//include_once (__ROOT1__."/includes/crea_funciones.php");
+}
 
 
 
@@ -1404,7 +1443,13 @@ foreach($_FILES AS $ETQIETA => $VALOR){
 
 }
 
+$ipconvenio = isset($_POST["ipconvenio"])?$_POST["ipconvenio"]:"";
+if($ipconvenio == true and ( $_FILES["CONVENIO_DOPROVEEDOR"]) ){
+foreach($_FILES AS $ETQIETA => $VALOR){
+	echo $proveedoresC->cargar($ETQIETA,'02metodopago','3',$ipconvenio);
+}	
 
+}
 
 
 ?>

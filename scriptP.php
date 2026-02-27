@@ -631,7 +631,7 @@ $('#mensajeOTROSP').html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().del
 
 
 
-//*DOCUMENTOS FISCALES DEL PROVEEDOR*/ 
+//*DOCUMENTOS FISCALES DEL PROVEEDOR*/ //////////////////////////////////////////////////////////////////
 
 
 
@@ -1064,40 +1064,113 @@ $('#mensajeDIRECEP').html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().de
 
 
 
-/*LISTO*/
-	$("#enviarMETODOPAGO").click(function(){
-		var formulario = $("#PMETODOPAGOform").serializeArray();
-			$.ajax({
-			type: "POST",
-			url: "proveedores/controladorP.php",
-			data: formulario,
-		}).done(function(respuesta){
+$("#enviarMETODOPAGO").click(function(){
 
-			//$("#mensajeADJUNTOCOL").html(respuesta);
-			if($.trim(respuesta)=='Ingresado' || $.trim(respuesta)=='Actualizado'){
-			$('#target7').hide("linear");
-			$("#mensajeMETODOP").load(location.href + " #mensajeMETODOP");
+const formData = new FormData($('#PMETODOPAGOform')[0]);
+
+$.ajax({
+   url:"proveedores/controladorP.php",
+    type: 'POST',
+    dataType: 'html',
+    data: formData,
+    cache: false,
+    contentType: false,
+    processData: false
+}).done(function(data) {
+
+		if($.trim(data)=='Ingresado' || $.trim(data)=='Actualizado'){	
+            $("#PMETODOPAGOform")[0].reset();
+			$("#reseteCONDICIONESp").load(location.href + " #reseteCONDICIONESp");
+			$("#mensajeMETODOP").html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().delay(2000).fadeOut(); 
 			}else{
-			$("#mensajeMETODOP").html(respuesta);				
-			}
+			$("#mensajeMETODOP").html(data);
+		}
+})
+.fail(function() {
+    console.log("detect error");
+});
+});
 
-			});
+
+
+
+$(document).on('click', '.view_dataconveniomodifica', function(){
+  //$('#dataModal').modal();
+  var personal_id = $(this).attr("id");
+  $.ajax({
+   url:"proveedores/VistaPreviaCONDICIONESC.php",
+   method:"POST",
+   data:{personal_id:personal_id},
+    beforeSend:function(){  
+    $('#mensajeMETODOP').html('CARGANDO'); 
+    },    
+   success:function(data){
+    $('#personal_detalles').html(data);
+    $('#dataModal').modal('show');
+   }
+  });
+ });
+
+$(document).on('click', '.view_dataconvenioborrar', function(){
+
+  var borra_id_MPAGO = $(this).attr("id");
+  var borraMETODODP = "borraMETODODP";
+
+  //AGREGAR
+    $('#personal_detalles3').html();
+    $('#dataModal3').modal('show');
+  $('#btnYes').click(function() {
+  //AGREGAR
+
+  
+  $.ajax({
+   url:"proveedores/controladorP.php",
+   method:"POST",
+   data:{borra_id_MPAGO:borra_id_MPAGO,borraMETODODP:borraMETODODP},
+   
+    beforeSend:function(){  
+    $('#mensajeMETODOP').html('CARGANDO'); 
+    },    
+   success:function(data){
+	   			$('#dataModal3').modal('hide');	   
+			$("#mensajeMETODOP").html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().delay(2000).fadeOut(); 			
+			$("#reseteCONDICIONESp").load(location.href + " #reseteCONDICIONESp");
+   }
+  });
+  
+    //AGREGAR	
 	});
+  //AGREGAR	 
+  
+ });
 
 
-//SCRIPT enviar EMAIL
-           $(document).on('click', '#enviar_email_metodopago', function(){
-             var METODOPAGO_ENVIAR_IMAIL = $('#METODOPAGO_ENVIAR_IMAIL').val();
 
-           $.ajax({
-            url:'proveedores/controladorP.php',
-            method:'POST',
-            data:{METODOPAGO_ENVIAR_IMAIL:METODOPAGO_ENVIAR_IMAIL},
-            beforeSend:function(){
-            $('#mensajeMETODOP').html('CARGANDO');
+$(document).on('click', '#enviarimailCONTP', function(){
+var METODOPAGO_ENVIAR_IMAIL = $('#METODOPAGO_ENVIAR_IMAIL').val();
+
+
+        var myCheckboxes = new Array();
+        $("input:checked").each(function() {
+           myCheckboxes.push($(this).val());
+        });
+var dataString = $("#form_emai_METODOpro").serialize();  
+
+
+
+$.ajax({
+url:'proveedores/controladorP.php',
+method:'POST',
+dataType: 'html',
+
+data: dataString+{METODOPAGO_ENVIAR_IMAIL:METODOPAGO_ENVIAR_IMAIL},
+
+
+beforeSend:function(){
+$('#mensajeMETODOP').html('CARGANDO');
 },
-            success:function(data){
-           $('#mensajeMETODOP').html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().delay(2000).fadeOut(); 
+success:function(data){
+$('#mensajeMETODOP').html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().delay(2000).fadeOut(); 
 
 }
 });
@@ -1872,6 +1945,7 @@ $.ajax({
     $('#mensajeCALIFICACION').html('cargando'); 
     },    
    success:function(data){
+	   $("#CALIFICACIONform")[0].reset();
 	
 		$("#reset_CALIFICACION").load(location.href + " #reset_CALIFICACION");	
 			$("#mensajeCALIFICACION").html("<span id='ACTUALIZADO' >"+data+"</span>").fadeIn().delay(2000).fadeOut(); 

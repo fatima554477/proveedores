@@ -1,11 +1,3 @@
-
-
-
-
-
-
-
-
 <div id="content">     
 			<hr/>
 		<strong>	  <p class="mb-0 text-uppercase" ><img src="includes/contraer31.png" id="mostrar13" style="cursor:pointer;"/>
@@ -71,7 +63,7 @@ $querycontras2 = $proveedoresC->variable_comborelacion($row["id"]);
 
 <button class="btn btn-sm btn-outline-success px-5"   type="button" id="enviarproveedorDE">GUARDAR</button><div style="
  position: absolute;
-    top: 78%; 
+    top: 50%; 
     right: 50%;
     transform: translate(50%,-50%);
     text-transform: uppercase;

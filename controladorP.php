@@ -1345,16 +1345,8 @@ $adjuntos = $proveedoresC->ADJUNTA_IMAGENES_EMAIL($cadenacompleta,'02adjuntardoc
 }
 
 elseif($hproveedorDE =='hproveedorDE'){
-$array = isset($_POST['SELECCIONAPROVEEDOR'])?$_POST['SELECCIONAPROVEEDOR']:'';
-if($array != ''){
-$loopcuenta = count($array) - 1;$loopcuenta2 = count($array) - 2;
-$or1='';
-for($rrr=0;$rrr<=$loopcuenta;$rrr++){
-	if($rrr<=$loopcuenta2){$or1 = ' or ';}else{$or1 = '';}
-	$query1 .= $array[$rrr].$or1;
-}
-}
-	echo $proveedoresC->PROVEEDORDE($query1);
+$array = isset($_POST['SELECCIONAPROVEEDOR']) && is_array($_POST['SELECCIONAPROVEEDOR']) ? $_POST['SELECCIONAPROVEEDOR'] : array();
+	echo $proveedoresC->PROVEEDORDE($array);
 }
 
 
